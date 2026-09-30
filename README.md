@@ -1,20 +1,20 @@
 # wayfire-hw-saturation
 
-A Wayfire plugin that adjusts display saturation in hardware by applying a DRM/KMS color transformation matrix (CTM) to the output CRTC.
+A Wayfire plugin that modifies display saturation directly in hardware by applying a DRM/KMS color transformation matrix (CTM) to the active CRTC.
 
-This project does not do software post-processing in the compositor. Instead, it writes the color transform directly to the hardware path when supported, allowing saturation changes to happen at the DRM layer.
+This project avoids software compositing tricks and instead writes the color adjustment to the hardware path when the output exposes the necessary DRM properties. The result is a low-latency saturation control for Wayfire.
 
 ## Features
 
 - Per-output saturation control for Wayfire
-- Hardware-accelerated saturation via DRM CTM
-- Supports values from 0.0 to 3.0
+- Hardware-accelerated color adjustment via DRM CTM
+- Supports saturation values from 0.0 to 3.0
 - Restores the original CTM when the plugin is unloaded or the output is destroyed
 - Works with Wayfire 0.11+ and libdrm-based DRM outputs
 
-## What the plugin does
+## How it works
 
-The plugin computes a 3x3 saturation matrix based on the luminance formula:
+The plugin computes a 3x3 saturation matrix using the luminance formula:
 
 - L = 0.2126 R + 0.7152 G + 0.0722 B
 - Output = L + S * (Input - L)
@@ -25,16 +25,16 @@ Where:
 - S = 1.0 means unchanged
 - S > 1.0 increases saturation
 
-This is applied atomically using the DRM `CTM` property on the relevant CRTC.
+The matrix is then applied atomically using the DRM `CTM` property on the relevant CRTC.
 
 ## Requirements
 
 - Wayfire >= 0.11.0
 - libdrm >= 2.4.120
 - A DRM/KMS-backed output that exposes a CRTC CTM property
-- A compositor environment running Wayfire on a supported Linux system
+- A Linux system using Wayfire
 
-## Building
+## Build and install
 
 ```bash
 git clone https://github.com/radless01/wayfire-hw-saturation.git
@@ -44,10 +44,10 @@ ninja -C build
 sudo ninja -C build install
 ```
 
-The project installs both:
+This installs:
 
-- the compiled plugin under Wayfire's plugin directory
-- the metadata XML file under Wayfire's metadata directory
+- the plugin binary into Wayfire's plugin directory
+- the metadata definition into Wayfire's metadata directory
 
 ## Configuration
 
@@ -61,7 +61,7 @@ Valid range:
 - maximum: `3.0`
 - default: `1.0`
 
-Example Wayfire configuration:
+Example configuration:
 
 ```ini
 [core]
@@ -71,12 +71,18 @@ plugins = .. hw_saturation ..
 value = 1.6
 ```
 
-A value of `1.0` leaves colors unchanged, `0.0` produces grayscale, and values above `1.0` increase saturation.
+Interpretation:
 
-## Project structure
+- `1.0` keeps the image unchanged
+- `0.0` produces grayscale
+- greater than `1.0` increases saturation
+
+## Repository layout
 
 ```text
 .
+├── LICENSE
+├── README.md
 ├── meson.build
 ├── metadata/
 │   ├── hw_saturation.xml
@@ -88,10 +94,11 @@ A value of `1.0` leaves colors unchanged, `0.0` produces grayscale, and values a
 
 ## Notes
 
-- This plugin operates at the KMS/DRM layer and is intended for hardware-aware color adjustment.
-- It is most useful on systems where the GPU/monitor stack supports CTM operations and the compositor is using DRM-backed outputs.
-- If the target output does not expose a CTM property, the plugin will fail gracefully and log an error.
+- This plugin operates at the KMS/DRM layer and is meant for hardware-aware color adjustment.
+- It is most useful on systems where the GPU and display stack support CTM operations.
+- If the target output does not expose a CTM property, the plugin logs the failure and exits gracefully.
 
 ## License
 
-This repository does not currently include an explicit license file.
+This project is licensed under the GNU General Public License v3.0 or later.
+See the [LICENSE](LICENSE) file for details.
