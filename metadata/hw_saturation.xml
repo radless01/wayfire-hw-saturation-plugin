@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<wayfire>
+    <plugin name="hw_saturation">
+        <_short>Hardware Saturation</_short>
+        <_long>
+            Hardware saturation through the DRM/KMS CRTC CTM
+            color transformation matrix.
+        </_long>
+        <category>General</category>
+        <option name="value" type="double">
+            <_short>Saturation</_short>
+            <_long>
+                0.0 is grayscale, 1.0 is unchanged,
+                values above 1.0 increase saturation.
+            </_long>
+            <default>1.0</default>
+            <min>0.0</min>
+            <max>3.0</max>
+        </option>
+    </plugin>
+</wayfire>
