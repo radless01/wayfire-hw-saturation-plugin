@@ -64,8 +64,11 @@ Valid range:
 Example Wayfire configuration:
 
 ```ini
-[plugin]
-hw_saturation/value = 1.6
+[core]
+plugins = .. hw_saturation ..
+
+[hw_saturation]
+value = 1.6
 ```
 
 A value of `1.0` leaves colors unchanged, `0.0` produces grayscale, and values above `1.0` increase saturation.
