@@ -17,5 +17,15 @@
             <min>0.0</min>
             <max>3.0</max>
         </option>
+        <option name="brightness" type="double">
+            <_short>Brightness</_short>
+            <_long>
+                1.0 is default,
+                values above 1.0 increase brightness.
+            </_long>
+            <default>1.0</default>
+            <min>1.0</min>
+            <max>2.0</max>
+        </option>
     </plugin>
 </wayfire>
