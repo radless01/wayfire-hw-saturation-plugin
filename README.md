@@ -18,7 +18,7 @@ wayfire libdrm glm
 git clone https://github.com/radless01/wayfire-hw-saturation-plugin.git
 cd wayfire-hw-saturation-plugin
 meson setup build --prefix=/usr --buildtype=release
-meson compile -C
+meson compile -C build
 sudo meson install -C build
 ```
 
