@@ -8,7 +8,7 @@ This project avoids software compositing tricks and instead uses hardware color 
 ### Arch Linux
 ```bash
 sudo pacman -S --needed \
-base-devel meson ninja \
+base-devel meson ninja pkgconfig \
 wayfire libdrm glm
 ```
 
