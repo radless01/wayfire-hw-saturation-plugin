@@ -4,6 +4,62 @@ A Wayfire plugin that modifies display saturation and brightness directly in har
 
 This project avoids software compositing tricks and instead uses hardware color management when available. It supports both the modern DRM plane color pipeline API (with separate saturation and brightness adjustments) and a legacy CRTC CTM fallback for broader compatibility.
 
+## Dependecies
+### Arch Linux
+```bash
+sudo pacman -S --needed \
+base-devel meson ninja \
+wayfire libdrm glm
+```
+
+## Build and install
+
+```bash
+git clone https://github.com/radless01/wayfire-hw-saturation-plugin.git
+cd wayfire-hw-saturation-plugin
+meson setup build --prefix=/usr --buildtype=release
+meson compile -C
+sudo meson install -C build
+```
+
+This installs:
+- The plugin binary into Wayfire's plugin directory
+- The metadata definition into Wayfire's metadata directory
+
+## Configuration
+
+The plugin exposes two independent options:
+
+### Saturation
+
+- **Option**: `hw-saturation/value`
+- **Range**: 0.0 to 3.0
+- **Default**: 1.0
+- **Interpretation**:
+  - `1.0` keeps the image unchanged
+  - `0.0` produces grayscale
+  - Greater than `1.0` increases saturation
+
+### Brightness
+
+- **Option**: `hw-saturation/brightness`
+- **Range**: 1.0 to 2.0
+- **Default**: 1.0
+- **Interpretation**:
+  - `1.0` is the default brightness
+  - Values above `1.0` increase brightness (scaled by 10% per unit)
+
+### Example configuration
+
+```ini
+[core]
+plugins = .. hw-saturation ..
+
+[hw-saturation]
+value = 1.6
+brightness = 1.2
+```
+
 ## Features
 
 - Per-output saturation and brightness control for Wayfire
@@ -57,54 +113,6 @@ On systems without plane color pipelines:
 
 - **Color Pipeline**: AMD GPUs with RDNA architecture, newer Intel Arc, recent NVIDIA (requires driver support)
 - **CRTC CTM Fallback**: Most modern GPUs and displays that support DRM CTM properties
-
-## Build and install
-
-```bash
-git clone https://github.com/radless01/wayfire-hw-saturation-plugin.git
-cd wayfire-hw-saturation-plugin
-meson setup build
-ninja -C build
-sudo ninja -C build install
-```
-
-This installs:
-- The plugin binary into Wayfire's plugin directory
-- The metadata definition into Wayfire's metadata directory
-
-## Configuration
-
-The plugin exposes two independent options:
-
-### Saturation
-
-- **Option**: `hw-saturation/value`
-- **Range**: 0.0 to 3.0
-- **Default**: 1.0
-- **Interpretation**:
-  - `1.0` keeps the image unchanged
-  - `0.0` produces grayscale
-  - Greater than `1.0` increases saturation
-
-### Brightness
-
-- **Option**: `hw-saturation/brightness`
-- **Range**: 1.0 to 2.0
-- **Default**: 1.0
-- **Interpretation**:
-  - `1.0` is the default brightness
-  - Values above `1.0` increase brightness (scaled by 10% per unit)
-
-### Example configuration
-
-```ini
-[core]
-plugins = .. hw-saturation ..
-
-[hw-saturation]
-value = 1.6
-brightness = 1.2
-```
 
 ## Repository layout
 
