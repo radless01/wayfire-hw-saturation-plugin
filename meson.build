@@ -1,22 +1,33 @@
-project(
-    'hw_saturation',
-    'cpp',
-    version: '1.0.0',
-    default_options: [
-        'cpp_std=c++17',
-        'warning_level=3',
-    ],
+project('wayfire-hw-saturation-plugin', 'cpp', version: '1.0.0')
+args = [
+    '-DWLR_USE_UNSTABLE',
+    '-DWAYFIRE_PLUGIN',
+    '-D_FILE_OFFSET_BITS=64'
+]
+
+add_project_arguments(args, language: 'cpp')
+add_project_link_arguments(['-rdynamic'], language: 'cpp')
+
+wayfire = dependency('wayfire')
+deps = [
+    wayfire,
+    dependency('libdrm')
+]
+
+sources = files(
+    'src/main.cpp'
 )
 
-wayfire = dependency(
-    'wayfire',
-    version: '>=0.11.0',
+shared_module(
+    'hw-saturation',
+    sources: sources,
+    dependencies: deps,
+
+    install: true,
+    install_dir: wayfire.get_variable(pkgconfig: 'plugindir')
 )
 
-libdrm = dependency(
-    'libdrm',
-    version: '>=2.4.120',
+install_data(
+    'metadata/hw-saturation.xml',
+    install_dir: wayfire.get_variable(pkgconfig: 'metadatadir')
 )
-
-subdir('src')
-subdir('metadata')

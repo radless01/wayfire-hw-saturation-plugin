@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <wayfire>
-    <plugin name="hw_saturation">
+    <plugin name="hw-saturation">
         <_short>Hardware Saturation</_short>
         <_long>
             Hardware saturation through the DRM/KMS CRTC CTM

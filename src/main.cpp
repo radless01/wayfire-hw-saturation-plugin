@@ -1291,12 +1291,12 @@ private:
 
     wf::option_wrapper_t<double>
         saturation_opt{
-            "hw_saturation/value"
+            "hw-saturation/value"
         };
 
     wf::option_wrapper_t<double>
         brightness_opt{
-            "hw_saturation/brightness"
+            "hw-saturation/brightness"
         };
 
     wl_event_source *idle_source = nullptr;
