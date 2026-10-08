@@ -1,8 +1,8 @@
-# wayfire-hw-saturation
+# wayfire-hw-saturation-plugin
 
 A Wayfire plugin that modifies display saturation and brightness directly in hardware by applying color transformations to the active display pipeline.
 
-This project avoids software compositing tricks and instead uses hardware color management when available. It supports both the modern DRM plane color pipeline API (with separate saturation and brightness controls) and the legacy CRTC CTM fallback for broader hardware compatibility.
+This project avoids software compositing tricks and instead uses hardware color management when available. It supports both the modern DRM plane color pipeline API (with separate saturation and brightness adjustments) and a legacy CRTC CTM fallback for broader compatibility.
 
 ## Features
 
@@ -78,7 +78,7 @@ The plugin exposes two independent options:
 
 ### Saturation
 
-- **Option**: `hw_saturation/value`
+- **Option**: `hw-saturation/value`
 - **Range**: 0.0 to 3.0
 - **Default**: 1.0
 - **Interpretation**:
@@ -88,7 +88,7 @@ The plugin exposes two independent options:
 
 ### Brightness
 
-- **Option**: `hw_saturation/brightness`
+- **Option**: `hw-saturation/brightness`
 - **Range**: 1.0 to 2.0
 - **Default**: 1.0
 - **Interpretation**:
@@ -99,9 +99,9 @@ The plugin exposes two independent options:
 
 ```ini
 [core]
-plugins = .. hw_saturation ..
+plugins = .. hw-saturation ..
 
-[hw_saturation]
+[hw-saturation]
 value = 1.6
 brightness = 1.2
 ```
@@ -114,11 +114,9 @@ brightness = 1.2
 ├── README.md
 ├── meson.build
 ├── metadata/
-│   ├── hw_saturation.xml
-│   └── meson.build
+│   └── hw-saturation.xml
 └── src/
-    ├── hw_saturation.cpp
-    └── meson.build
+    └── main.cpp
 ```
 
 ## Implementation Details
@@ -133,7 +131,7 @@ When using the plane color pipeline path, the plugin:
 
 ### Property Management
 
-All colorops in the selected chain are explicitly bypassed in the atomic request, with only MULTIPLIER and CTM_3x4 enabled. This is required by the DRM color-pipeline API and ensures compatibility across different GPU architectures.
+All colorops in the selected chain are explicitly bypassed in the atomic request, with only MULTIPLIER and CTM_3x4 enabled. This is required by the DRM color-pipeline API and ensures compatibility across supported hardware.
 
 ### DRM Property Encoding
 
