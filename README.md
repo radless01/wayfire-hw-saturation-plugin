@@ -12,7 +12,7 @@ base-devel meson ninja pkgconfig \
 wayfire libdrm glm
 ```
 
-## Build and install
+## Build & install
 
 ```bash
 git clone https://github.com/radless01/wayfire-hw-saturation-plugin.git
