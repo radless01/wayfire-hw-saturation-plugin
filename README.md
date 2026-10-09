@@ -22,10 +22,6 @@ meson compile -C build
 sudo meson install -C build
 ```
 
-This installs:
-- The plugin binary into Wayfire's plugin directory
-- The metadata definition into Wayfire's metadata directory
-
 ## Configuration
 
 The plugin exposes two independent options:
